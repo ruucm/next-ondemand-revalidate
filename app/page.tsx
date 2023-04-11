@@ -1,7 +1,7 @@
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { RevalidateButton } from "../components/RevalidateButton";
-const https = require("https");
+import Link from "next/link";
+import { getResolvedUrl } from "../utils";
 
 export default async function Page() {
   const resolvedURL: any = await getResolvedUrl(
@@ -10,80 +10,33 @@ export default async function Page() {
   console.log("resolvedURL", resolvedURL);
 
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    <main>
+      <p className={styles.description}>
+        To see the on-demand revalidation results, build first then visit un
+        revalidated pages.
+        <br />
+        <code className={styles.code}>yarn build && yarn start</code>
+        <br />
+        <br />
+        Then visit page like <code className={styles.code}>/dog</code> or{" "}
+        <code className={styles.code}>/cat</code>.<br />
+        It will make another caches for each page in the{" "}
+        <code className={styles.code}>.next</code> folder.
+        <br />
+        <br />
+        Util it is revalidated, it will use the cached version. (It will show
+        the same dog & cat image.)
+      </p>
 
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
+      {/* <div style={{ display: "flex", gap: 12, padding: 50 }}>
+          <Link href="/dog">Go to dog</Link>
+          <Link href="/cat">Go to cat</Link>
+        </div> */}
 
-        <RevalidateButton />
-
-        <img src={resolvedURL} style={{ width: "100%" }} />
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
+      <RevalidateButton />
+      <img src={resolvedURL} style={{ width: "100%" }} />
+    </main>
   );
-}
-
-async function getResolvedUrl(url) {
-  return new Promise((resolve, reject) => {
-    https
-      .request(url, { method: "HEAD" }, (res) => {
-        const resolvedUrl = res.headers.location;
-        resolve(resolvedUrl);
-      })
-      .on("error", (err) => {
-        reject(err);
-      })
-      .end();
-  });
 }
 
 export const metadata = {

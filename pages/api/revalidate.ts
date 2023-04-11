@@ -4,18 +4,24 @@ export default async function handler(req, res) {
   //   return res.status(401).json({ message: 'Invalid token' })
   // }
 
+  // get params from query string
+  const { pageId } = req.query;
+
   try {
     // This should be the actual path not a rewritten path
     // e.g. for "/blog/[slug]" this should be "/blog/post-1"
     console.log("start revalidate (server)");
-    await res.revalidate(`/`);
-    // await res.revalidate(`/${pageId}`);
+    // await res.revalidate(`/`);
+    // if (pageId)
+    await res.revalidate(`/${pageId}`);
     console.log("revalidated (server)");
     return res.status(200).send({ message: "Revalidated" });
   } catch (error) {
     console.log("revalidating error", error);
     // If there was an error, Next.js will continue
     // to show the last successfully generated page
-    return res.status(500).send({ message: "Error revalidating", error });
+    return res
+      .status(500)
+      .send({ message: `Error revalidating - ${error.message}` });
   }
 }
